@@ -1,0 +1,268 @@
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+#qwrap { font-family: var(--font-sans); max-width: 640px; margin: 0 auto; padding: 1rem 0.5rem 2rem; }
+
+#hero { background: #c8102e; border-radius: 16px; padding: 2rem 1.75rem 1.75rem; margin-bottom: 1.25rem; }
+#crest-row { display: flex; align-items: center; gap: 16px; margin-bottom: 1.25rem; }
+#crest-circle { width: 64px; height: 64px; flex-shrink: 0; border-radius: 50%; background: #fff; border: 3px solid #f5a800; display: flex; align-items: center; justify-content: center; }
+#hero-title { font-size: 24px; font-weight: 500; color: #fff; line-height: 1.2; }
+#hero-sub { font-size: 15px; color: #ffd0d5; margin-top: 3px; }
+#pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+.pill { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 100px; padding: 5px 14px; font-size: 13px; font-weight: 500; color: #fff; }
+.pill span { color: #f5a800; }
+#prog-track { height: 6px; background: rgba(255,255,255,0.2); border-radius: 100px; overflow: hidden; }
+#prog-fill { height: 6px; background: #f5a800; border-radius: 100px; width: 0%; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+
+#cat-label { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #c8102e; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 6px; }
+#cat-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+#q-card { background: #fff; border: 2px solid #c8102e; border-radius: 14px; padding: 1.5rem; margin-bottom: 1rem; }
+#q-num { font-size: 12px; font-weight: 500; color: #c8102e; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
+#q-text { font-size: 18px; font-weight: 500; color: #111; line-height: 1.55; }
+
+#options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+
+.opt {
+  background: #fff;
+  border: 2px solid #bbb;
+  border-radius: 10px;
+  padding: 0.9rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.12s, background 0.12s, transform 0.1s;
+  line-height: 1.3;
+}
+.opt:hover:not(:disabled) { border-color: #c8102e; background: #fff3f3; transform: translateY(-2px); }
+.opt:active:not(:disabled) { transform: scale(0.98); }
+
+.opt-letter {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: 50%;
+  background: #c8102e;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500; color: #fff;
+}
+
+.opt-text { color: #111; font-size: 15px; font-weight: 500; }
+
+.opt.correct { background: #eaf3de; border-color: #3B6D11; }
+.opt.correct .opt-letter { background: #3B6D11; }
+.opt.correct .opt-text { color: #1a3d08; }
+.opt.wrong { background: #fcebeb; border-color: #a32d2d; }
+.opt.wrong .opt-letter { background: #a32d2d; }
+.opt.wrong .opt-text { color: #5c0f0f; }
+.opt:disabled { cursor: default; transform: none; }
+
+#feedback-box { border-radius: 10px; padding: 1rem 1.25rem; font-size: 14px; line-height: 1.65; margin-bottom: 1rem; display: none; border: 1.5px solid #d0d0d0; background: #fafafa; color: #111; }
+#feedback-box.show { display: block; }
+#fb-label { font-size: 13px; font-weight: 500; margin-bottom: 5px; }
+#fb-label.ok { color: #27500a; }
+#fb-label.no { color: #791f1f; }
+#fb-body { color: #222; font-size: 14px; }
+
+#next-btn { display: none; background: #c8102e; color: #fff; border: none; border-radius: 10px; padding: 0.85rem 2rem; font-size: 15px; font-weight: 500; cursor: pointer; margin-left: auto; font-family: var(--font-sans); transition: opacity 0.15s; }
+#next-btn.show { display: block; }
+#next-btn:hover { opacity: 0.88; }
+
+#results { display: none; }
+#results.show { display: block; }
+#res-hero { background: #c8102e; border-radius: 16px; padding: 2rem; text-align: center; margin-bottom: 1rem; }
+#res-ring { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #f5a800; background: rgba(255,255,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+#res-num { font-size: 36px; font-weight: 500; color: #fff; line-height: 1; }
+#res-denom { font-size: 14px; color: rgba(255,255,255,0.7); }
+#res-title { font-size: 22px; font-weight: 500; color: #fff; margin-bottom: 6px; }
+#res-msg { font-size: 15px; color: #ffd0d5; }
+
+#cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+.cat-card { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 12px; padding: 1rem; }
+.cc-label { font-size: 12px; font-weight: 500; color: #444; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+.cc-score { font-size: 22px; font-weight: 500; color: #111; margin-bottom: 8px; }
+.cc-score small { font-size: 14px; font-weight: 400; color: #777; }
+.cc-track { height: 5px; background: #f0f0f0; border-radius: 100px; overflow: hidden; }
+.cc-fill { height: 5px; border-radius: 100px; }
+
+#restart-btn { width: 100%; background: transparent; border: 1.5px solid #c8102e; border-radius: 10px; padding: 0.85rem; font-size: 15px; font-weight: 500; color: #c8102e; cursor: pointer; font-family: var(--font-sans); transition: background 0.12s, color 0.12s; }
+#restart-btn:hover { background: #c8102e; color: #fff; }
+
+@media (max-width: 420px) { #options { grid-template-columns: 1fr; } }
+</style>
+
+<div id="qwrap">
+  <h2 style="position:absolute;width:1px;height:1px;overflow:hidden;">Exeter City FC quiz</h2>
+
+  <div id="hero">
+    <div id="crest-row">
+      <div id="crest-circle">
+        <svg width="46" height="46" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="22,3 26.8,14.5 39,14.5 29,21.5 33,33.5 22,26.5 11,33.5 15,21.5 5,14.5 17.2,14.5" fill="#c8102e" stroke="#f5a800" stroke-width="1.5" stroke-linejoin="round"/>
+          <text x="22" y="23.5" text-anchor="middle" dominant-baseline="middle" font-size="7.5" font-weight="700" fill="#f5a800" font-family="Arial, sans-serif" letter-spacing="0.5">ECFC</text>
+        </svg>
+      </div>
+      <div>
+        <div id="hero-title">Exeter City FC quiz</div>
+        <div id="hero-sub">How well do you know the Grecians?</div>
+      </div>
+    </div>
+    <div id="pills">
+      <div class="pill">12 questions</div>
+      <div class="pill">Score: <span id="live-score">0</span></div>
+      <div class="pill" id="streak-pill" style="display:none">Streak: <span id="live-streak">0</span></div>
+    </div>
+    <div id="prog-track"><div id="prog-fill"></div></div>
+  </div>
+
+  <div id="q-section">
+    <div id="cat-label"><span id="cat-dot"></span><span id="cat-name">History</span></div>
+    <div id="q-card">
+      <div id="q-num">Question 1 of 12</div>
+      <div id="q-text"></div>
+    </div>
+    <div id="options"></div>
+    <div id="feedback-box"><div id="fb-label"></div><div id="fb-body"></div></div>
+    <div style="display:flex;justify-content:flex-end;">
+      <button id="next-btn">Next question →</button>
+    </div>
+  </div>
+
+  <div id="results">
+    <div id="res-hero">
+      <div id="res-ring"><span id="res-num">0</span><span id="res-denom">/ 12</span></div>
+      <div id="res-title"></div>
+      <div id="res-msg"></div>
+    </div>
+    <div id="cat-grid"></div>
+    <button id="restart-btn">Play again</button>
+  </div>
+</div>
+
+<script>
+const Qs = [
+  { q:"In what year was Exeter City FC founded?", opts:["1901","1904","1908","1896"], ans:1, cat:"history", fact:"Exeter City was formed in 1904 from the merger of St Sidwell's United and Exeter United — one of the oldest clubs in the south-west." },
+  { q:"What nickname are Exeter City widely known by?", opts:["The Robins","The Grecians","The Pilgrims","The Clarets"], ans:1, cat:"history", fact:"'The Grecians' has been the club's nickname for over a century, with one popular theory linking it to the St Sidwell's area where early players lived." },
+  { q:"What is the name of Exeter City's home ground?", opts:["Sandy Park","St James Park","Devon Park","Grecians Stadium"], ans:1, cat:"ground", fact:"St James Park has been Exeter City's home since 1904 and is one of the oldest Football League grounds still in continuous use." },
+  { q:"In 1914, Exeter City became the first English club to play which national team?", opts:["Brazil","Argentina","Uruguay","USA"], ans:0, cat:"history", fact:"On a South American tour in 1914, Exeter City played the Brazilian national team — now commemorated by a statue in Exeter city centre." },
+  { q:"Who holds the majority ownership of Exeter City FC?", opts:["A local council","The supporters' trust","A private consortium","A university"], ans:1, cat:"history", fact:"The Exeter City Supporters' Trust took over the club in 2003 following a financial crisis, making it one of England's best-known fan-owned clubs." },
+  { q:"Which famous manager had a spell as Exeter City player-manager in the 1970s?", opts:["Brian Clough","Alex Ferguson","Terry Venables","Cliff Bastin"], ans:2, cat:"players", fact:"Terry Venables was player-manager at Exeter from 1974 to 1976, before going on to manage Barcelona and the England national team." },
+  { q:"Paul Tisdale managed Exeter City for 12 extraordinary years — when did he leave?", opts:["2012","2016","2018","2020"], ans:2, cat:"players", fact:"Tisdale was in charge from 2006 to 2018, one of the longest unbroken managerial tenures in English football history." },
+  { q:"What colours do Exeter City traditionally wear?", opts:["All red","Red and white stripes","Red and black","Red and white halves"], ans:1, cat:"ground", fact:"Red and white stripes have been Exeter City's traditional colours for the vast majority of the club's history." },
+  { q:"What is the approximate capacity of St James Park?", opts:["3,500","6,600","8,700","12,500"], ans:2, cat:"ground", fact:"St James Park holds around 8,696. The famous Big Bank terrace is one of the most atmospheric open stands in the EFL." },
+  { q:"How far did Exeter City progress in the 1930–31 FA Cup?", opts:["Third round","Fourth round","Quarter-final","Semi-final"], ans:3, cat:"honours", fact:"In 1930–31, Exeter City reached the FA Cup semi-finals — still their best-ever run — before losing to Sunderland in a replay." },
+  { q:"Which league were Exeter City competing in during the 2024–25 season?", opts:["League One","Championship","League Two","National League"], ans:0, cat:"honours", fact:"After winning promotion at the end of 2021–22, Exeter City have competed in League One, the third tier of English football." },
+  { q:"Who holds the record for the most league appearances for Exeter City?", opts:["Arnold Mitchell","Fred Davie","Dermot Curtis","John Smale"], ans:0, cat:"players", fact:"Arnold Mitchell made 495 league appearances for Exeter City between 1952 and 1966 — a club record standing for over 60 years." }
+];
+
+const catMeta = {
+  history: { label:"History & founding", color:"#c8102e" },
+  ground:  { label:"Ground & stadium",   color:"#185FA5" },
+  honours: { label:"Honours & records",  color:"#854F0B" },
+  players: { label:"Players & managers", color:"#3B6D11" }
+};
+
+let cur=0, score=0, streak=0, answered=false;
+const catScores = { history:[0,0], ground:[0,0], honours:[0,0], players:[0,0] };
+const order = [...Array(Qs.length).keys()].sort(()=>Math.random()-0.5);
+
+function render(){
+  const q = Qs[order[cur]];
+  document.getElementById('q-num').textContent = `Question ${cur+1} of ${Qs.length}`;
+  document.getElementById('q-text').textContent = q.q;
+  const cm = catMeta[q.cat];
+  document.getElementById('cat-name').textContent = cm.label;
+  document.getElementById('cat-dot').style.background = cm.color;
+  document.getElementById('cat-label').style.color = cm.color;
+  document.getElementById('q-card').style.borderColor = cm.color;
+  document.getElementById('prog-fill').style.width = `${(cur/Qs.length)*100}%`;
+  const letters = ['A','B','C','D'];
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.opts.forEach((o,i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${o}</span>`;
+    b.onclick = ()=>pick(i);
+    opts.appendChild(b);
+  });
+  document.getElementById('feedback-box').className='';
+  document.getElementById('feedback-box').style.display='none';
+  const nb = document.getElementById('next-btn');
+  nb.className=''; nb.style.display='none';
+  answered=false;
+}
+
+function pick(i){
+  if(answered) return;
+  answered=true;
+  const q = Qs[order[cur]];
+  const btns = document.querySelectorAll('.opt');
+  btns.forEach(b=>b.disabled=true);
+  const ok = i===q.ans;
+  catScores[q.cat][1]++;
+  if(ok){ score++; streak++; catScores[q.cat][0]++; btns[i].classList.add('correct'); }
+  else { streak=0; btns[i].classList.add('wrong'); btns[q.ans].classList.add('correct'); }
+  document.getElementById('live-score').textContent=score;
+  if(streak>=2){ document.getElementById('streak-pill').style.display=''; document.getElementById('live-streak').textContent=streak; }
+  const lbl=document.getElementById('fb-label');
+  lbl.textContent=ok?'Correct!':'Not quite!';
+  lbl.className=ok?'ok':'no';
+  document.getElementById('fb-body').textContent=q.fact;
+  const fb=document.getElementById('feedback-box');
+  fb.style.display='block'; fb.className='show';
+  const nb=document.getElementById('next-btn');
+  nb.style.display='block'; nb.className='show';
+  nb.textContent=cur<Qs.length-1?'Next question →':'See results →';
+}
+
+document.getElementById('next-btn').onclick=()=>{ cur++; cur>=Qs.length?showResults():render(); };
+
+function showResults(){
+  document.getElementById('q-section').style.display='none';
+  document.getElementById('cat-label').style.display='none';
+  document.getElementById('results').className='show';
+  document.getElementById('prog-fill').style.width='100%';
+  document.getElementById('res-num').textContent=score;
+  const pct=score/Qs.length;
+  const [,title,msg]=[
+    [1,   "Perfect — legend status!", "You bleed red and white. Absolutely flawless."],
+    [0.75,"Excellent Grecians fan!",  "You clearly know your club inside out."],
+    [0.5, "Solid performance!",       "Decent effort — a few gaps to fill."],
+    [0.25,"Not bad for a start!",     "Keep learning and try again."],
+    [0,   "Time to learn more!",      "St James Park awaits — get to know the Grecians!"]
+  ].find(([t])=>pct>=t);
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-msg').textContent=msg;
+  const grid=document.getElementById('cat-grid');
+  grid.innerHTML='';
+  for(const [cat,meta] of Object.entries(catMeta)){
+    const [got,total]=catScores[cat];
+    if(!total) continue;
+    const card=document.createElement('div');
+    card.className='cat-card';
+    card.innerHTML=`<div class="cc-label">${meta.label}</div>
+      <div class="cc-score">${got}<small> / ${total}</small></div>
+      <div class="cc-track"><div class="cc-fill" style="width:${total?Math.round(got/total*100):0}%;background:${meta.color}"></div></div>`;
+    grid.appendChild(card);
+  }
+}
+
+document.getElementById('restart-btn').onclick=()=>{
+  cur=0;score=0;streak=0;answered=false;
+  for(const c in catScores) catScores[c]=[0,0];
+  order.sort(()=>Math.random()-0.5);
+  document.getElementById('live-score').textContent='0';
+  document.getElementById('streak-pill').style.display='none';
+  document.getElementById('results').className='';
+  document.getElementById('q-section').style.display='';
+  document.getElementById('cat-label').style.display='';
+  document.getElementById('prog-fill').style.width='0%';
+  render();
+};
+
+render();
+</script>
